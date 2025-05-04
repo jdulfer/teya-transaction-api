@@ -61,6 +61,7 @@ data class TransactionResponse(
     val amount: String,
     val accountId: String,
     val counterpartyId: String,
+    val status: Transaction.TransactionStatus
 ) {
     constructor(transaction: Transaction) : this(
         transactionId = transaction.transactionId,
@@ -68,5 +69,6 @@ data class TransactionResponse(
         amount = transaction.amount.setScale(2).toPlainString(),
         accountId = transaction.accountId,
         counterpartyId = transaction.counterpartyId,
+        status = transaction.status
     )
 }

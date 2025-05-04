@@ -3,7 +3,6 @@ package com.teya.daos.memory
 import com.teya.daos.TransactionDAO
 import com.teya.db.TransactionsDB
 import com.teya.domain.Transaction
-import io.ktor.http.HttpStatusCode.Companion.NotFound
 import io.ktor.server.plugins.*
 import java.math.BigDecimal
 
@@ -34,6 +33,8 @@ class MemoryTransactionDAO(private val transactionsDB: TransactionsDB) : Transac
         val badTransaction = transactionsDB.transactions.find { it.transactionId == transactionId }
             ?: throw NotFoundException("Transaction not found")
 
+        badTransaction.status = Transaction.TransactionStatus.FAILED
+
         val reverseTransaction = Transaction(
             transactionId = (transactionsDB.transactions.size + 1).toString(),
             transactionType = if (badTransaction.transactionType == Transaction.TransactionType.INCOMING) {
@@ -44,7 +45,7 @@ class MemoryTransactionDAO(private val transactionsDB: TransactionsDB) : Transac
             amount = badTransaction.amount,
             accountId = badTransaction.accountId,
             counterpartyId = badTransaction.counterpartyId,
-            status = Transaction.TransactionStatus.REVERSED
+            status = Transaction.TransactionStatus.REVERSAL
         )
         transactionsDB.addTransaction(reverseTransaction)
         return reverseTransaction

@@ -8,13 +8,13 @@ data class Transaction(
     val amount: BigDecimal,
     val accountId: String,
     val counterpartyId: String,
-    val status: TransactionStatus
+    var status: TransactionStatus
 ) {
     enum class TransactionType {
         INCOMING, OUTGOING
     }
 
     enum class TransactionStatus {
-        PENDING, COMPLETE, REVERSED, FAILED
+        PENDING, COMPLETE, REVERSAL, FAILED
     }
 }
