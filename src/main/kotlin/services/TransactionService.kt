@@ -23,4 +23,12 @@ class TransactionService(private val transactionDAO: TransactionDAO) {
     }
 
     fun getTransactions(accountId: String): List<Transaction> = transactionDAO.getTransactions(accountId)
+
+    fun reverseTransactions(transactionIds: List<String>): List<Transaction> {
+        val reversedTransactions = transactionIds.map { transactionId ->
+            transactionDAO.reverseTransaction(transactionId)
+        }
+
+        return reversedTransactions
+    }
 }

@@ -35,10 +35,17 @@ fun Routing.transactionRoutes() {
         }
 
         post("/reverse") {
-
+            val payload = call.receive<List<TransactionReversal>>()
+            val reversedTransactions = transactionService.reverseTransactions(payload.map { it.transactionId })
+            call.respond(reversedTransactions.map { TransactionResponse(it) })
         }
     }
 }
+
+@Serializable
+data class TransactionReversal(
+    val transactionId: String
+)
 
 @Serializable
 data class MovementPayload(
